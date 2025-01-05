@@ -73,8 +73,9 @@ Accuracy: 96.49%
 Precision: 96% (Malignant), 97% (Benign)
 Recall: 96% (Malignant), 97% (Benign)
 F1-Score: 96% (Malignant), 97% (Benign)
-Confusion Matrix
 
+
+**Confusion Matrix**
 ```lua
 [[64,  2]
  [ 2, 46]]
