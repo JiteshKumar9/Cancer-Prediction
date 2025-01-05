@@ -1,53 +1,83 @@
-Cancer Prediction using Logistic Regression
-Overview
-This project aims to predict whether a tumor is malignant (M) or benign (B) based on various features like radius, texture, perimeter, area, smoothness, and others. The dataset used for this project is the Breast Cancer Wisconsin (Diagnostic) dataset, which contains features computed from a digitized image of a fine needle aspirate (FNA) of a breast mass.
+# Cancer Prediction Using Logistic Regression
 
-The model used for this prediction is Logistic Regression, which is trained on a subset of the dataset and evaluated using accuracy and other classification metrics.
+This project uses machine learning to predict whether a tumor is malignant (M) or benign (B) based on various features of cell nuclei. The dataset is the Wisconsin Breast Cancer Dataset, which includes multiple features such as radius, texture, smoothness, and others.
 
-Dataset
-The dataset used in this project is from the UCI Machine Learning Repository and is available here.
+## Project Overview
 
-Columns in the dataset:
-id: Unique identifier for each sample.
-diagnosis: The diagnosis of the tumor (M = malignant, B = benign).
-radius_mean, texture_mean, perimeter_mean, area_mean, etc.: Various features computed from the image of the tumor.
-Libraries Used
-Pandas: Data manipulation and analysis.
-NumPy: Mathematical functions.
-Scikit-learn: Machine learning algorithms and utilities for model training and evaluation.
-Steps to Run the Project
-Clone this repository to your local machine:
+The goal of this project is to predict cancer diagnosis (Malignant or Benign) using Logistic Regression. The model is trained using the features from the dataset, and the performance is evaluated based on accuracy, precision, recall, and F1-score.
 
-bash
-Copy code
-git clone https://github.com/yourusername/cancer-prediction.git
-Install the required libraries:
+## Dataset
 
-bash
-Copy code
-pip install -r requirements.txt
-Run the Python script:
+The dataset is available from the UCI Machine Learning Repository. It contains 569 samples, each with 32 features (excluding the ID column). The features represent measurements of cell nuclei from breast cancer biopsies. The target variable is `diagnosis`, which has two possible values:
+- `M` for Malignant
+- `B` for Benign
 
-bash
-Copy code
-python cancer_prediction.py
-The model will be trained and evaluated, and the accuracy and classification report will be printed.
+The dataset contains the following columns:
+- `id`: Unique identifier for each sample
+- `diagnosis`: The diagnosis of the tumor (Malignant or Benign)
+- `radius_mean`, `texture_mean`, etc.: Various feature measurements
 
-Model Performance
-After training the model, the following results were obtained on the test set:
+## Libraries Used
 
+- `pandas`: Data manipulation and analysis
+- `sklearn`: Machine learning and model evaluation
+- `matplotlib`: Data visualization (optional)
+
+## Steps Involved
+
+1. **Data Loading**: The dataset is loaded from a CSV file.
+2. **Data Preprocessing**: The `id`, `diagnosis`, and `Unnamed: 32` columns are dropped, and the target variable (`diagnosis`) is separated from the feature set.
+3. **Train-Test Split**: The dataset is split into training and testing sets (80% training, 20% testing).
+4. **Model Training**: A Logistic Regression model is trained on the training set.
+5. **Model Evaluation**: The model's performance is evaluated using the test set, and the results are displayed using metrics like accuracy, precision, recall, and F1-score.
+
+## Code
+
+```python
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+
+# Load dataset
+cancer = pd.read_csv('https://github.com/YBIFoundation/Dataset/raw/main/Cancer.csv')
+
+# Preprocessing
+y = cancer['diagnosis']
+X = cancer.drop(['id','diagnosis','Unnamed: 32'],axis=1)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=2529)
+
+# Train model
+model = LogisticRegression(max_iter=5000)
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation
+conf_matrix = confusion_matrix(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+print("Confusion Matrix:")
+print(conf_matrix)
+print("\nAccuracy Score:", accuracy)
+print("\nClassification Report:")
+print(class_report)
+
+
+**Results**
 Accuracy: 96.49%
-Confusion Matrix:
-lua
-Copy code
-[[64,  2],
+Precision: 96% (Malignant), 97% (Benign)
+Recall: 96% (Malignant), 97% (Benign)
+F1-Score: 96% (Malignant), 97% (Benign)
+Confusion Matrix
+
+```lua
+[[64,  2]
  [ 2, 46]]
-Classification Report:
-css
-Copy code
-            precision    recall  f1-score   support
-         B       0.97      0.97      0.97        66
-         M       0.96      0.96      0.96        48
-  accuracy                           0.96       114
- macro avg       0.96      0.96      0.96       114
-weighted avg 0.96 0.96 0.96 114
+
+**Conclusion**
+The Logistic Regression model performs very well with an accuracy of 96.49%. The model is able to predict whether a tumor is malignant or benign with high precision and recall.
